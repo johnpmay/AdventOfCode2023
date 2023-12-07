@@ -13,8 +13,9 @@ ans1 := min( map(`@`(seq(F[i],i=7..1,-1)), seeds) );
 
 # part 2
 newseeds := [seq(seeds[i]..seeds[i]+seeds[i+1], i=1..nops(seeds), 2)]:
-g := convert( F[2](F[1](x)), piecewise, x):
-for i from 3 to 7 do
+g := F[1](x):
+for i from 2 to 7 do # very slow, but necessary for minimize to work
     g := convert( F[i](g), piecewise, x);
 end do:
+# find g's minimum value over each range in newseeds
 ans2 := min(seq(minimize(g, x=r), r in newseeds));

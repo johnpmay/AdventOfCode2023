@@ -11,7 +11,7 @@ rlimit := 12:
 glimit := 13:
 blimit := 14:
 
-ans1 := 0:
+count := 0:
 for i to nops(games2) do
     flag := true;
     for j to nops(games2[i]) do
@@ -20,21 +20,20 @@ for i to nops(games2) do
         end if;
     end do;
     if flag then
-        ans1 := ans1 + i;
+        count := count + i;
     end if;
 end do:
-ans1;
+ans1 := count;
 
 # part 2
-ans2 := 0;
+mincount := 0;
 for i to nops(games2) do
-    flag := true; 
     mins := table(sparse);
     for j to nops(games2[i]) do
         mins[red] := max(mins[red], games2[i][j][red]);
         mins[green] := max(mins[green], games2[i][j][green]);
         mins[blue] := max(mins[blue], games2[i][j][blue]);
     end do;
-    ans2 := ans2+mins[red]*mins[green]*mins[blue];
+    mincount := mincount+mins[red]*mins[green]*mins[blue];
 end do:
-ans2;
+ans2 := mincount;
