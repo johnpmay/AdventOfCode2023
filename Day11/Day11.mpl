@@ -6,7 +6,7 @@ m,n := (rhs~([rtable_dims(grid)]))[];
 (r,c) := ArrayTools:-SearchArray(grid):
 galaxies := [seq([r[i],c[i]], i=1..numelems(r))]: ng := nops(galaxies);
 exrows := {seq}(ifelse(add(grid[i])=0, i, NULL), i = 1..m);
-excols := {seq}(ifelse(add(grid[..,i])=0, i, NULL), i = 1..m);
+excols := {seq}(ifelse(add(grid[..,i])=0, i, NULL), i = 1..n);
 
 exdistance := proc(a, b, xfactor)
 global exrows, excols;
@@ -18,5 +18,3 @@ end proc:
 
 ans1 := add( add( exdistance( galaxies[i], galaxies[j], 1 ), j=i+1..ng), i=1..ng);
 ans2 := add( add( exdistance( galaxies[i], galaxies[j], 10^6-1 ), j=i+1..ng), i=1..ng);
-
-
