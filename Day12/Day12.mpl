@@ -1,13 +1,8 @@
-#restart;
 with(StringTools): s2i := s->sscanf(s,"%d")[1]:
 input := FileTools:-Text:-ReadFile("../../AdventOfCode_inputs/AoC-2023-12-input.txt" ):
 
 recs := map(l->[l[1], map(s2i,Split(l[2],","))], map(Split,Split(Trim(input),"\n")," ")):
 parity := s->add(subs(["."=0,"?"=0,"#"=1], Explode(s))); parity("#??#");
-CheckData2 := proc(str::string, num::list(posint)) #option trace;
-     if Search("?", str) > 0 then error; end if; 
-     evalb(map(length, Split(Trim(Squeeze(Subs("."=" ", str)))))=num);
-end proc:
 
 CheckData := proc(str::string, num::list(posint), pre::integer:=length(str)) #option trace;
 local i, bn, damcount;
