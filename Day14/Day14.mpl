@@ -74,12 +74,10 @@ tilt("N");
 ans1 := add(map(add, subs("#"=0,"."=0,"O"=1, convert(grid,listlist)) *~ [seq(m-i+1, i=1..m)]));
 
 grid := Matrix(ogrid):
-radix := max(map(length, subs(""=NULL, Split( cat(map(l->(l[],"#"), convert( grid, listlist))[]), "#"))));
-fingerprint := proc()
-local i, d;
-    d := map(s->length(Subs("."="",s)), 
+fingerprint := proc() # a bit smaller than the whole grid
+local i;
+    return map(s->length(Subs("."="",s)), 
         subs(""=NULL, Split( cat(map(l->(l[],"#"), convert( grid, listlist))[]), "#")));
-    return add(d[i]*radix^(nops(d)-i),i=1..nops(d));
 end proc:
 
 dotilt := proc() tilt("N"):tilt("W"):tilt("S"):tilt("E"): end proc:
