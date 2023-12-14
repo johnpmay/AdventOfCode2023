@@ -6,7 +6,7 @@ parity := s->add(subs(["."=0,"?"=0,"#"=1], Explode(s))); parity("#??#");
 
 CheckData := proc(str::string, num::list(posint), pre::integer:=length(str)) #option trace;
 local i, bn, damcount;
-option cache;
+option remember;
 
     if parity(str) > add(num) then return fail('p'); end if;
 
@@ -52,7 +52,7 @@ end proc:
 
 findMatches := proc(orr, nn)# option trace;
 local rr, i, dstr, ostr, chk, p, tot:=0;
-option cache;
+option remember;
 
      p := parity(orr);
      if p > add(nn) then return 0; end if;
@@ -104,10 +104,16 @@ normalize := proc(s)
      return o;
 end proc:
 
+Grid:-Launch():
+
 recsn := map(r->[normalize(normalize(r[1]) ), r[2]], recs):
-ans1 := CodeTools:-Usage( add(findMatches(r[]), r in recsn) );
+matchcounts := CodeTools:-Usage( Grid:-Map(r->findMatches(r[]), recsn) ):
+ans1 := ( add(matchcounts) );
 
 unfold_recs := map(r->[normalize(normalize(r[1]) ), r[2]], map(r->local i; [cat(r[1],"?",r[1],"?",r[1],"?",r[1],"?",r[1]), [seq(r[2][],i=1..5)]], recs)):
-ans2 := CodeTools:-Usage( add(findMatches(r[]), r in unfold_recs) );
+ttt := time():
+matchcounts := CodeTools:-Usage( Grid:-Map(r->findMatches(r[]), unfold_recs) ):
+ans2 := ( add(matchcounts) );
+(time()-ttt)*Unit(seconds);
 # correct: 18716325559999
 
