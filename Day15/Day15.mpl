@@ -1,4 +1,3 @@
-#restart;
 with(StringTools): s2i := s->sscanf(s,"%d")[1]:
 input := FileTools:-Text:-ReadFile("../../AdventOfCode_inputs/AoC-2023-15-input.txt" ):
 
