@@ -3,6 +3,14 @@ input := FileTools:-Text:-ReadFile("../../AdventOfCode_inputs/AoC-2023-18-input.
 
 dirs := map(Split,Split(Trim(input),"\n")):
 start := [1,1];
+
+np := table(["R"=[0,1], "L"=[0,-1], "U"=[-1,0], "D"=[1,0]]);
+pt := table([ 
+["R","D"]=1,  ["R","U"]=-1,
+["L","D"]=-1, ["L","U"]=1,
+["D","R"]=-1,  ["D","L"]=1,
+["U","R"]=1, ["U","L"]=-1 ]):
+
 pos := start;
 ptcount := 0;
 poly := DEQueue();

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Worksheet>
-<Version major="2024" minor="0"/>
+<Version major="2023" minor="2"/>
 <Label-Scheme value="2" prefix=""/>
 <View-Properties presentation="false" autoexpanding_sections="true" UserProfileName="Maple Default Profile" NumericFormat-ApplyInteger="true" NumericFormat-ApplyRational="true" NumericFormat-ApplyExponent="false" editable="true">
 </View-Properties>
-<MapleNet-Properties prettyprint="3" warnlevel="3" compactdisplay="false" preplot="" helpbrowser="standard" displayprecision="-1" echo="1" scientificx="true" unitattributes="&quot;fontweight&quot; = &quot;bold&quot;" imaginaryunit="I" longdelim="true" elisiontermsthreshold="10000" elisiondigitsafter="100" elisiondigitsbefore="100" plotdevice="inline" errorbreak="1" plotoptions="" plotdriver="opengl" quiet="false" elisiontermsbefore="100" elisiontermsafter="100" historytimestamp="false" screenwidth="79" indentamount="4" plotoutput="terminal" screenpixelheight="1080" rtablesize="[10, 10]" useclientjvm="true" format="worksheet" labelwidth="20" postplot="" typesetting="extended" ansi="false" ansicolor="[]" elisiondigitsthreshold="10000" showassumed="1" ansilprint="false" trailingsemicolon="true" errorcursor="false" labelling="true" screenheight="25" prompt="&gt; " verboseproc="1" latexwidth="8.0" ShowLabels="true"/>
+<MapleNet-Properties prettyprint="3" warnlevel="3" compactdisplay="false" preplot="" helpbrowser="standard" displayprecision="-1" echo="1" scientificx="true" unitattributes="&quot;fontweight&quot; = &quot;bold&quot;" imaginaryunit="I" longdelim="true" elisiontermsthreshold="10000" elisiondigitsafter="100" elisiondigitsbefore="100" plotdevice="inline" errorbreak="1" plotoptions="" plotdriver="opengl" quiet="false" elisiontermsbefore="100" elisiontermsafter="100" historytimestamp="false" screenwidth="79" indentamount="4" plotoutput="terminal" screenpixelheight="1152" rtablesize="[10, 10]" useclientjvm="true" format="worksheet" labelwidth="20" postplot="" typesetting="extended" ansi="false" ansicolor="[]" elisiondigitsthreshold="10000" showassumed="1" ansilprint="false" trailingsemicolon="true" errorcursor="false" labelling="true" screenheight="25" prompt="&gt; " verboseproc="1" latexwidth="8.0" ShowLabels="true"/>
 <Styles>
 <Font name="Heading 1" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="18" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
 <Font name="Warning" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[0,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
@@ -94,141 +94,14 @@ with(StringTools): s2i := s-&gt;sscanf(s,&quot;%d&quot;)[1]:</Text-field>
 </Input>
 </Group>
 <Group hide-input="false" labelreference="L11" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">input := FileTools:-Text:-ReadFile(&quot;../../AdventOfCode_inputs/AoC-2023-19-input.txt&quot; ):</Text-field>
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">input := FileTools:-Text:-ReadFile(&quot;../../AdventOfCode_inputs/AoC-2023-XX-input.txt&quot; ):</Text-field>
 </Input>
 </Group>
 <Group hide-input="false" labelreference="L12" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">input1 :=
-&quot;px{a&lt;2006:qkq,m&gt;2090:A,rfg}
-pv{a&gt;1716:R,A}
-lnx{m&gt;1548:A,A}
-rfg{s&lt;537:gd,x&gt;2440:R,A}
-qs{s&gt;3448:A,lnx}
-qkq{x&lt;1416:A,crn}
-crn{x&gt;2662:A,R}
-in{s&lt;1351:px,qqz}
-qqz{s&gt;2770:qs,m&lt;1801:hdj,R}
-gd{a&gt;3333:R,R}
-hdj{m&gt;838:A,pv}
-
-{x=787,m=2655,a=1222,s=2876}
-{x=1679,m=44,a=2067,s=496}
-{x=2036,m=264,a=79,s=2244}
-{x=2461,m=1339,a=466,s=291}
-{x=2127,m=1623,a=2188,s=1013}
-&quot;:</Text-field>
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">input :=&quot;&quot;;</Text-field>
 </Input>
 </Group>
-<Group hide-input="false" labelreference="L13" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"><Font encoding="UTF-8">(rules, parts) := StringSplit(Trim(input),&quot;\134n\134n&quot;)[]:
-</Font>rules := map(proc(s) local p := FirstFromLeft(&quot;{&quot;,s); s[1..p-1]=PW(Split(s[p+1..-2],&quot;,:&quot;)[]); end proc, Split(rules)):
-rorder := map2(op,1, rules):
-rules := subsindets(rules, string, s-&gt;ifelse(Has(s,&quot;&gt;&quot;) or Has(s,&quot;&lt;&quot;), parse(s),s)):
-lrules := table(eval(rules, PW=(()-&gt;[_passed]))):
-rules := table(subs(PW=piecewise, rules)):
-#x=1, m=2, a=3, s=4
-parts := map(q-&gt;map(s-&gt;s2i(Select(IsDigit,s)), Split(q,&quot;,&quot;)), Split(parts)):</Text-field>
-</Input>
-</Group>
-<Group hide-input="false" labelreference="L14" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">
-check_part := proc(p)
-local res := eval( rules[&quot;in&quot;], {x=p[1],m=p[2],a=p[3],s=p[4]});
-while res&lt;&gt;&quot;A&quot; and res&lt;&gt;&quot;R&quot; do
-   if not assigned(rules[res]) then error &quot;snh&quot;; end if;
-   res := eval( rules[res], {x=p[1],m=p[2],a=p[3],s=p[4]});
-end do;
-ifelse(res=&quot;A&quot;, true, false);
-end proc:
-
-</Text-field>
-</Input>
-<Input><Text-field prompt="&gt; " style="Maple Input" spaceabove="0" linebreak="space" rightmargin="0" linespacing="0.0" initial="0" firstindent="0" leftmargin="0" bulletsuffix="" alignment="left" bullet="none" spacebelow="0" pagebreak-before="false">ans1 := add( map( add, select(check_part, parts)) );</Text-field>
-</Input>
-</Group>
-<Group hide-input="false" labelreference="L15" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">(*
-expr := rules[&quot;in&quot;]:
-while indets(expr,string) &lt;&gt; {&quot;A&quot;,&quot;R&quot;} do
-expr := ( subs({seq(q=rules[q],q in rorder)}, expr) );
-end do:
-expr;
-*)
-
-</Text-field>
-</Input>
-</Group>
-<Group hide-input="false" labelreference="L16" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">dict := table([x=1,m=2,a=3,s=4]);
-count_parts := proc(r, vals)
-local count:=0, rule, pivot, var, splitvals, restvals, i, range, fh, lh, v;
-if not assigned(lrules[r]) then error &quot;snh&quot;; end if;
-
-# base case
-if member([], vals) then return 0; end if;
-
-rule := lrules[r];
-restvals := vals;
-for i to nops(rule)-1 by 2 do
-    # find the split
-    pivot := indets(rule[i], integer)[]:
-    var := indets(rule[i], name)[]:
-    range := restvals[dict[var]];
-<Font encoding="UTF-8">PRINTF(&quot;%s: %a\134n&quot;, r, rule[i]);
-</Font>    if type(op(1,rule[i]),name) then # &lt;
-<Font encoding="UTF-8">         PRINTF(&quot;%s: split %a &lt; %d for %s\134n&quot;,r, var, pivot, rule[i+1]);
-</Font>         fh := ifelse(range[1]&gt;pivot-1, [], [range[1], pivot-1]);
-         lh := ifelse(pivot&gt;range[2], [], [pivot, range[2]]);
-         splitvals := subsop(dict[var]=fh,restvals);
-         restvals := subsop(dict[var]=lh,restvals);
-    else # &gt;
-         <Font encoding="UTF-8">PRINTF(&quot;%s: split %a &gt; %d for %s\134n&quot;, r, var, pivot, rule[i+1]);</Font>
-         fh := ifelse(range[1]&gt;pivot, [], [range[1], pivot]);
-         lh := ifelse(pivot+1&gt;range[2], [], [pivot+1, range[2]]);
-         splitvals := subsop(dict[var]=lh,restvals);
-         restvals := subsop(dict[var]=fh,restvals);
-    end if;
-    if rule[i+1] = &quot;R&quot; then
-        next; # discard splitvals
-    elif rule[i+1] = &quot;A&quot; then
-        # count all splitvals
-        count := count + mul(`-`(v[],1), v in splitvals);
-    else
-        count := count + thisproc(rule[i+1], splitvals);
-    end if;
-
-end do;
-
-<Font encoding="UTF-8">PRINTF(&quot;%s: Rest for %s\134n&quot;, r, rule[-1]);</Font>
-
-if rule[-1] = &quot;R&quot; then
-    # discard rest
-elif rule[-1] = &quot;A&quot; then
-    count := count + mul(`-`(v[],1), v in restvals);
-else
-    count := count + thisproc(rule[-1], restvals);
-end if;
-
-return count;
-
-end proc:
-</Text-field>
-</Input>
-</Group>
-<Group hide-input="false" labelreference="L17" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">#trace(count_parts,depth=1);
-count_parts(&quot;in&quot;, [[1,4000], [1,4000], [1, 4000], [1, 4000]]);
-
-ans2 := %;
-
-#ans2 - 167409079868000; # check example</Text-field>
-</Input>
-</Group>
-<Group hide-input="false" labelreference="L18" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
-</Input>
-</Group>
-<Group labelreference="L26" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Group labelreference="L13" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
 </Input>
 </Group>
