@@ -98,26 +98,8 @@ with(StringTools): s2i := s-&gt;sscanf(s,&quot;%d&quot;)[1]:</Text-field>
 </Input>
 </Group>
 <Group hide-input="false" labelreference="L12" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">input1 :=
-&quot;broadcaster -&gt; a, b, c
-%a -&gt; b
-%b -&gt; c
-%c -&gt; inv
-&amp;inv -&gt; a
-&quot;:</Text-field>
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
 </Input>
-</Group>
-<Group hide-input="false" labelreference="L18" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">input2 := 
-&quot;broadcaster -&gt; a
-%a -&gt; inv, con
-&amp;inv -&gt; b
-%b -&gt; con
-&amp;con -&gt; output
-&quot;;</Text-field>
-</Input>
-<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYmLUkjbWlHRiQ2JVEnaW5wdXQyRicvJSdpdGFsaWNHUSV0cnVlRicvJSxtYXRodmFyaWFudEdRJ2l0YWxpY0YnLUkjbW9HRiQ2LlEpJkFzc2lnbjtGJy9GM1Enbm9ybWFsRicvJSZmZW5jZUdRJmZhbHNlRicvJSpzZXBhcmF0b3JHRj0vJSlzdHJldGNoeUdGPS8lKnN5bW1ldHJpY0dGPS8lKGxhcmdlb3BHRj0vJS5tb3ZhYmxlbGltaXRzR0Y9LyUnYWNjZW50R0Y9LyUnbHNwYWNlR1EsMC4yNzc3Nzc4ZW1GJy8lJ3JzcGFjZUdGTC8lKWVxdWFsaXR5R0Y9LUkjbXNHRiQ2I1Feb2Jyb2FkY2FzdGVyfi0+fmF8KyVhfi0+fmludix+Y29ufCsmaW52fi0+fmJ8KyVifi0+fmNvbnwrJmNvbn4tPn5vdXRwdXR8K0YnRjk=">LV9JLFR5cGVzZXR0aW5nRzYkJSpwcm90ZWN0ZWRHSShfc3lzbGliRzYiSSxtcHJpbnRzbGFzaEdGKDYkNyM+SSdpbnB1dDJHRihRXm9icm9hZGNhc3Rlcn4tPn5hfCslYX4tPn5pbnYsfmNvbnwrJmludn4tPn5ifCslYn4tPn5jb258KyZjb25+LT5+b3V0cHV0fCtGKDcjRi4=</Equation></Text-field>
-</Output>
 </Group>
 <Group hide-input="false" labelreference="L13" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"><Font encoding="UTF-8">themodl := map(s-&gt;[s[1], StringSplit(s[2],&quot;, &quot;)], map(StringSplit, Split(Trim(input),&quot;\134n&quot;), &quot; -&gt; &quot;)):
@@ -126,33 +108,37 @@ themods := table(map(l-&gt;ifelse(l[1][1]=&quot;b&quot;,l[1],l[1][2..-1])=[l[1][
 revcon := table([seq(m=select(n-&gt;member(m,themods[n][2]), allmods), m in allmods)]):</Text-field>
 </Input>
 </Group>
-<Group hide-input="false" labelreference="L16" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">
-
-</Text-field>
-</Input>
-</Group>
 <Group hide-input="false" labelreference="L14" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">states := table([ seq(m=ifelse(themods[m][1]=&quot;&amp;&quot;, table([seq(n=&quot;low&quot;,n in revcon[m])]), ifelse(themods[m][1]=&quot;%&quot;,&quot;off&quot;, &quot;none&quot;)), m in indices(themods,nolist))]): # initial states
 
-
 Q := DEQueue():
-count := table([&quot;low&quot;=0,&quot;high&quot;=0]):
-slist := [seq(ifelse(states[m]::string, states[m], cat(seq(ifelse(states[m][n]::string, states[m][n], &quot;&quot;),n in allmods))), m in allmods)]:
-bcount[0] := [0,0]:<Font encoding="UTF-8">
-for j to 1000 do
-# press button : low signal to broadcast
-#printf(&quot;Button Press #%d\134n\134n&quot;, j);</Font>
+
+prx := select(has, themodl, &quot;rx&quot;)[][1][2..3];
+prxinp := [indices(states[prx],nolist)];
+periods := table():
+
+for j to 10000 do
+
 push_back(Q, [&quot;broadcaster&quot;,&quot;low&quot;,&quot;button&quot;]):
+
 while not empty(Q) do
     evnt := pop_front(Q);
    
     omod := evnt[3];
     tmod := evnt[1];
     sigtype := evnt[2];
-    count[sigtype] := count[sigtype]+1;<Font encoding="UTF-8">
-#    printf(&quot;%s -%s-&gt; %s\134n&quot;, omod, sigtype, tmod);
-    </Font>if not member(tmod, allmods) then # dead end
+    
+    if not member(tmod, allmods) then # dead end
+        if tmod = &quot;rx&quot; then # compute periods
+           for i in prxinp do
+               if states[prx][i] = &quot;high&quot; then
+                   periods[i] := j;
+               end if;
+           end do;
+           if numelems(periods) = nops(prxinp) then
+               break;
+           end if;
+        end if;
         next;
     end if;
 
@@ -185,44 +171,21 @@ while not empty(Q) do
     end do;
 
 end do:
-
-nstate := [seq(ifelse(states[m]::string, states[m], cat(seq(ifelse(states[m][n]::string, states[m][n], &quot;&quot;),n in allmods))), m in allmods)];
-
-bcount[j] := [count[&quot;low&quot;], count[&quot;high&quot;]];
-
-if member(nstate, {slist}, 'loc') then
-    break; # repeated state;
-else
-    slist := slist, nstate;
-end if;
-
+           if numelems(periods) = nops(prxinp) then
+               break;
+           end if;
 end do:
-</Text-field>
+
+ans2 := lcm( entries(periods,nolist) );</Text-field>
 </Input>
-</Group>
-<Group hide-input="false" labelreference="L15" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">if j &lt; 1000 then
-lead := 1-loc;
-loop := j-loc + 1;
-leadcount := bcount[lead];
-loopcount := bcount[j] - bcount[lead];
-ans1 := mul( (1000-lead)/loop * loopcount );
-else
-ans1 := mul( mul(bcount[1000]) );
-end if;</Text-field>
-</Input>
-<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYmLUkjbWlHRiQ2JVElYW5zMUYnLyUnaXRhbGljR1EldHJ1ZUYnLyUsbWF0aHZhcmlhbnRHUSdpdGFsaWNGJy1JI21vR0YkNi5RKSZBc3NpZ247RicvRjNRJ25vcm1hbEYnLyUmZmVuY2VHUSZmYWxzZUYnLyUqc2VwYXJhdG9yR0Y9LyUpc3RyZXRjaHlHRj0vJSpzeW1tZXRyaWNHRj0vJShsYXJnZW9wR0Y9LyUubW92YWJsZWxpbWl0c0dGPS8lJ2FjY2VudEdGPS8lJ2xzcGFjZUdRLDAuMjc3Nzc3OGVtRicvJSdyc3BhY2VHRkwvJSllcXVhbGl0eUdGPS1JI21uR0YkNiRRKjk0NDc1MDE0NEYnRjlGOQ==">LV9JLFR5cGVzZXR0aW5nRzYkJSpwcm90ZWN0ZWRHSShfc3lzbGliRzYiSSxtcHJpbnRzbGFzaEdGKDYkNyM+SSVhbnMxR0YoIipXLHZXKjcjRi4=</Equation></Text-field>
+<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYmLUkjbWlHRiQ2JVEkcHJ4RicvJSdpdGFsaWNHUSV0cnVlRicvJSxtYXRodmFyaWFudEdRJ2l0YWxpY0YnLUkjbW9HRiQ2LlEpJkFzc2lnbjtGJy9GM1Enbm9ybWFsRicvJSZmZW5jZUdRJmZhbHNlRicvJSpzZXBhcmF0b3JHRj0vJSlzdHJldGNoeUdGPS8lKnN5bW1ldHJpY0dGPS8lKGxhcmdlb3BHRj0vJS5tb3ZhYmxlbGltaXRzR0Y9LyUnYWNjZW50R0Y9LyUnbHNwYWNlR1EsMC4yNzc3Nzc4ZW1GJy8lJ3JzcGFjZUdGTC8lKWVxdWFsaXR5R0Y9LUkjbXNHRiQ2I1Eja3pGJ0Y5">LV9JLFR5cGVzZXR0aW5nRzYkJSpwcm90ZWN0ZWRHSShfc3lzbGliRzYiSSxtcHJpbnRzbGFzaEdGKDYkNyM+SSRwcnhHRihRI2t6Rig3I0Yu</Equation></Text-field>
+</Output>
+<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYmLUkjbWlHRiQ2JVEncHJ4aW5wRicvJSdpdGFsaWNHUSV0cnVlRicvJSxtYXRodmFyaWFudEdRJ2l0YWxpY0YnLUkjbW9HRiQ2LlEpJkFzc2lnbjtGJy9GM1Enbm9ybWFsRicvJSZmZW5jZUdRJmZhbHNlRicvJSpzZXBhcmF0b3JHRj0vJSlzdHJldGNoeUdGPS8lKnN5bW1ldHJpY0dGPS8lKGxhcmdlb3BHRj0vJS5tb3ZhYmxlbGltaXRzR0Y9LyUnYWNjZW50R0Y9LyUnbHNwYWNlR1EsMC4yNzc3Nzc4ZW1GJy8lJ3JzcGFjZUdGTC8lKWVxdWFsaXR5R0Y9LUkobWZlbmNlZEdGJDYmLUYjNiwtSSNtc0dGJDYjUSNiZ0YnLUY2Ni5RIixGJ0Y5RjsvRj9GMUZARkJGREZGRkgvRktRJjAuMGVtRicvRk5RLDAuMzMzMzMzM2VtRidGTy1GVzYjUSNxcUYnRlotRlc2I1EjbHNGJ0ZaLUZXNiNRI3NqRicvJStmb3JlZ3JvdW5kR1EoWzAsMCwwXUYnLyUpcmVhZG9ubHlHRj1GOUY5LyUlb3BlbkdRJyZsc3FiO0YnLyUmY2xvc2VHUScmcnNxYjtGJ0Y5">LV9JLFR5cGVzZXR0aW5nRzYkJSpwcm90ZWN0ZWRHSShfc3lzbGliRzYiSSxtcHJpbnRzbGFzaEdGKDYkNyM+SSdwcnhpbnBHRig3JlEjYmdGKFEjcXFGKFEjbHNGKFEjc2pGKDcjRi4=</Equation></Text-field>
+</Output>
+<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkdGJzYmLUkjbWlHRiQ2JVElYW5zMkYnLyUnaXRhbGljR1EldHJ1ZUYnLyUsbWF0aHZhcmlhbnRHUSdpdGFsaWNGJy1JI21vR0YkNi5RKSZBc3NpZ247RicvRjNRJ25vcm1hbEYnLyUmZmVuY2VHUSZmYWxzZUYnLyUqc2VwYXJhdG9yR0Y9LyUpc3RyZXRjaHlHRj0vJSpzeW1tZXRyaWNHRj0vJShsYXJnZW9wR0Y9LyUubW92YWJsZWxpbWl0c0dGPS8lJ2FjY2VudEdGPS8lJ2xzcGFjZUdRLDAuMjc3Nzc3OGVtRicvJSdyc3BhY2VHRkwvJSllcXVhbGl0eUdGPS1JI21uR0YkNiRRMDIyMjcxODgxOTQzNzEzMUYnRjlGOQ==">LV9JLFR5cGVzZXR0aW5nRzYkJSpwcm90ZWN0ZWRHSShfc3lzbGliRzYiSSxtcHJpbnRzbGFzaEdGKDYkNyM+SSVhbnMyR0YoIjBKclY+KT1GQTcjRi4=</Equation></Text-field>
 </Output>
 </Group>
-<Group hide-input="false" labelreference="L17" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
-</Input>
-</Group>
-<Group hide-input="false" labelreference="L19" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
-<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
-</Input>
-</Group>
-<Group labelreference="L20" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Group hide-input="false" labelreference="L15" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
 <Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
 </Input>
 </Group>
