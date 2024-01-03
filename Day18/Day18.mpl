@@ -30,6 +30,7 @@ A := 1/2 * abs(R[1][2]*(R[n][1]-R[2][1])+add(R[i][2]*(R[i-1][1]-R[i+1][1]), i=2.
 # picks's theorem A = I + bd/2-1
 bdpoints := ptcount;
 intpoints := A - ptcount/2 + 1;
+
 ans1 := intpoints+bdpoints;
 
 # part 2
@@ -54,4 +55,6 @@ n:=nops(R);
 A := 1/2 * abs(R[1][2]*(R[n][1]-R[2][1])+add(R[i][2]*(R[i-1][1]-R[i+1][1]), i=2..n-1)+(R[n][2]*(R[n-1][1]-R[1][1])));
 bdpoints := ptcount;
 intpoints := A - ptcount/2 + 1;
+
 ans2 := intpoints+bdpoints;
+
